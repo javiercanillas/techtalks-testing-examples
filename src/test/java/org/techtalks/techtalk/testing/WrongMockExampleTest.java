@@ -1,6 +1,7 @@
 package org.techtalks.testing;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
@@ -20,14 +21,18 @@ class WrongMockExampleTest {
         }
     }
 
+    @Disabled
     @Test
-    void calculateNextTick() {
-        final Clock clock = Clock.systemDefaultZone();
+    void calculateNextTick() throws InterruptedException {
         var calculator = new TickCalculator();
-        Assertions.assertEquals(Instant.now(clock)
-                        .plus(100L,
-                                ChronoUnit.SECONDS)
-                        .getLong(ChronoField.INSTANT_SECONDS),
+        final var expectedNextTick = Instant.now()
+                .plus(100L,
+                        ChronoUnit.SECONDS)
+                .getLong(ChronoField.INSTANT_SECONDS);
+
+        Thread.sleep(500);
+        
+        Assertions.assertEquals(expectedNextTick,
                 calculator.nextTick());
     }
 }
