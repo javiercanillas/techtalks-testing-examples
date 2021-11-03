@@ -1,0 +1,20 @@
+.gradle
+out
+build
+bin
+target
+
+# Idea
+.idea
+*.iml
+
+# Eclipse
+.classpath
+.settings
+.project
+
+# tmp files
+*.swp
+
+# mac mac mac
+*.DS_Store
