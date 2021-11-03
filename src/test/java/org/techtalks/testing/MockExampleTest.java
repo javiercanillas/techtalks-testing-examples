@@ -5,36 +5,37 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 class MockExampleTest {
 
-    static class TickCalculator {
+    static class WorkingHourCalculator {
         Clock clock;
-        public TickCalculator() {
+
+        public WorkingHourCalculator() {
             this(Clock.systemDefaultZone());
         }
 
-        public TickCalculator(final Clock clock) {
+        public WorkingHourCalculator(final Clock clock) {
             this.clock = clock;
         }
 
-        public long nextTick() {
-            return Instant.now(clock)
-                    .plus(100L, ChronoUnit.SECONDS)
-                    .getLong(ChronoField.INSTANT_SECONDS);
+        public boolean isNow() {
+            var now = LocalDateTime.now(clock);
+            var today = now.toLocalDate();
+            var start = today.atTime(9, 0, 0);
+            var end = today.atTime(18, 0, 0);
+            return now.isAfter(start) && now.isBefore(end);
         }
     }
 
     @Test
-    void calculateNextTick() {
-        final Clock clock = Clock.systemDefaultZone();
-        var calculator = new TickCalculator(clock);
-        Assertions.assertEquals(Instant.now(clock)
-                        .plus(100L, ChronoUnit.SECONDS)
-                        .getLong(ChronoField.INSTANT_SECONDS),
-                calculator.nextTick());
+    void isNotWorkingHour() {
+        final Clock clock = Clock.fixed(Instant.parse("2021-11-03T10:15:30.00Z"),
+                ZoneId.of("America/Sao_Paulo"));
+        var calculator = new WorkingHourCalculator(clock);
+        Assertions.assertFalse(calculator.isNow());
     }
 }

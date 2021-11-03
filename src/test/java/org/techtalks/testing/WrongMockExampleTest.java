@@ -4,32 +4,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
 
 
 class WrongMockExampleTest {
 
-    static class TickCalculator {
+    static class WorkingHourCalculator {
 
-        public long nextTick() {
-            return Instant.now()
-                    .plus(100L, ChronoUnit.SECONDS)
-                    .getLong(ChronoField.INSTANT_SECONDS);
+        public boolean isNow() {
+            var now = LocalDateTime.now();
+            var today = now.toLocalDate();
+            var start = today.atTime(9, 0, 0);
+            var end = today.atTime(18, 0, 0);
+            return now.isAfter(start) && now.isBefore(end);
         }
     }
 
-    @Disabled
+    @Disabled("It will work eventually")
     @Test
-    void calculateNextTick() {
-        var calculator = new TickCalculator();
-        final var expectedNextTick = Instant.now()
-                .plus(100L,
-                        ChronoUnit.SECONDS)
-                .getLong(ChronoField.INSTANT_SECONDS);
-        Assertions.assertEquals(expectedNextTick,
-                calculator.nextTick());
+    void isNotWorkingHour() {
+        var calculator = new WorkingHourCalculator();
+        Assertions.assertFalse(calculator.isNow());
     }
 }
