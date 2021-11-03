@@ -23,15 +23,12 @@ class WrongMockExampleTest {
 
     @Disabled
     @Test
-    void calculateNextTick() throws InterruptedException {
+    void calculateNextTick() {
         var calculator = new TickCalculator();
         final var expectedNextTick = Instant.now()
                 .plus(100L,
                         ChronoUnit.SECONDS)
                 .getLong(ChronoField.INSTANT_SECONDS);
-
-        Thread.sleep(500);
-        
         Assertions.assertEquals(expectedNextTick,
                 calculator.nextTick());
     }
