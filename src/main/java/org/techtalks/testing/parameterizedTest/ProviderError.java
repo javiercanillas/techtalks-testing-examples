@@ -1,4 +1,4 @@
-package org.techtalks.testing;
+package org.techtalks.testing.parameterizedTest;
 
 import lombok.Data;
 

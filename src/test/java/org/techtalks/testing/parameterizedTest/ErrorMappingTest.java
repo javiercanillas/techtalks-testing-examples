@@ -1,4 +1,4 @@
-package org.techtalks.testing;
+package org.techtalks.testing.parameterizedTest;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
